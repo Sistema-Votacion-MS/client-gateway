@@ -3,9 +3,10 @@ import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { NatsModule } from './transports/nats.module';
 import { ElectionModule } from './election/election.module';
+import { CandidateModule } from './candidate/candidate.module';
 
 @Module({
-  imports: [/* UsersModule,  */AuthModule, NatsModule, ElectionModule],
+  imports: [/* UsersModule,  */AuthModule, NatsModule, ElectionModule, CandidateModule],
   controllers: [],
   providers: [],
 })
