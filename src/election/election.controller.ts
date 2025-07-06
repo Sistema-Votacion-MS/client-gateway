@@ -61,4 +61,16 @@ export class ElectionController {
       }),
     );
   }
+
+  @Get(':id/voters/:uid')
+  veryfyVoter(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Param('uid', ParseUUIDPipe) uid: string,
+  ) {
+    return this.client.send({ cmd: 'voter_verify' }, { electionId: id, userId: uid }).pipe(
+      catchError((error) => {
+        throw new RpcException(error);
+      }),
+    );
+  }
 }
