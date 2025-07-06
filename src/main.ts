@@ -3,6 +3,7 @@ import { AppModule } from './app.module';
 import { envs } from './config/envs';
 import { Logger, ValidationPipe } from '@nestjs/common';
 import { RpcCustomExceptionFilter } from './common/exceptions/rpc-custom-exception.filter';
+import { HttpExceptionFilter } from './common/exceptions/http-exception.filter';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
@@ -17,7 +18,12 @@ async function bootstrap() {
       forbidNonWhitelisted: true,
     })
   );
-  app.useGlobalFilters(new RpcCustomExceptionFilter())
+
+  // Orden importante: HttpExceptionFilter primero, luego RpcCustomExceptionFilter
+  app.useGlobalFilters(
+    new HttpExceptionFilter(),
+    new RpcCustomExceptionFilter()
+  );
 
   // Configuración de Swagger
   const config = new DocumentBuilder()
