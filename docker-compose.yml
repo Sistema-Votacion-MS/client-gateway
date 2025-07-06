@@ -1,7 +1,35 @@
 services:
+  client-gateway:
+    build: .
+    container_name: client-gateway
+    ports:
+      - "${PORT:-3000}:${PORT:-3000}"
+    environment:
+      - PORT=${PORT:-3000}
+      - NATS_SERVERS=${NATS_SERVERS:-nats://nats-server:4222}
+      - JWT_SECRET=${JWT_SECRET:-your-secret-key-here}
+    depends_on:
+      - nats-server
+    restart: unless-stopped
+    networks:
+      - voting-system
+    volumes:
+      - ./logs:/usr/src/app/logs
 
   nats-server:
     image: nats:latest
+    container_name: nats-server
     ports:
       - "4222:4222"
       - "8222:8222"
+    restart: unless-stopped
+    networks:
+      - voting-system
+    command: ["-js", "-m", "8222"]
+
+networks:
+  voting-system:
+    driver: bridge
+
+volumes:
+  logs:
