@@ -12,8 +12,10 @@ export class AuthController {
 
   @Post('register')
   register(@Body() registerDto: RegisterDto) {
-    return this.client.send({ cmd: 'auth_register' }, registerDto).pipe(
+    console.log('Registering user:', registerDto);
+    return this.client.send({ cmd: 'auth_registe' }, registerDto).pipe(
       catchError((error) => {
+        console.error('Error during registration:', error);
         throw new RpcException(error);
       }),
     );
