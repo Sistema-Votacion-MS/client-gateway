@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
-import { VotesService } from './votes.service';
 import { VotesController } from './votes.controller';
+import { NatsModule } from 'src/transports/nats.module';
 
 @Module({
   controllers: [VotesController],
-  providers: [VotesService],
+  imports: [NatsModule],
 })
 export class VotesModule {}
