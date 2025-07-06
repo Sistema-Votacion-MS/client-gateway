@@ -1,98 +1,340 @@
+# 🗳️ Client Gateway - Sistema de Votaciones Electrónicas
+
 <p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
+  <img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" />
 </p>
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
-
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
+<p align="center">
+  API Gateway construido con NestJS para el Sistema de Votaciones Electrónicas basado en microservicios
 </p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
 
-## Description
+<p align="center">
+  <a href="https://github.com/Sistema-Votacion-MS/client-gateway" target="_blank">
+    <img src="https://img.shields.io/github/license/Sistema-Votacion-MS/client-gateway" alt="License" />
+  </a>
+  <a href="https://github.com/Sistema-Votacion-MS/client-gateway" target="_blank">
+    <img src="https://img.shields.io/github/stars/Sistema-Votacion-MS/client-gateway" alt="Stars" />
+  </a>
+  <a href="https://github.com/Sistema-Votacion-MS/client-gateway/issues" target="_blank">
+    <img src="https://img.shields.io/github/issues/Sistema-Votacion-MS/client-gateway" alt="Issues" />
+  </a>
+</p>
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## 📋 Descripción
 
-## Project setup
+El **Client Gateway** es el punto de entrada principal para el Sistema de Votaciones Electrónicas. Actúa como API Gateway que centraliza y orquesta las comunicaciones entre el cliente y los microservicios del sistema, proporcionando autenticación, autorización y enrutamiento de peticiones.
 
-```bash
-$ npm install
+## 🏗️ Arquitectura
+
+```
+┌─────────────────┐    ┌──────────────────┐    ┌─────────────────┐
+│   Frontend      │───►│  Client Gateway  │───►│  Microservicios │
+│   (React/Vue)   │    │    (NestJS)      │    │   (Auth, User,  │
+└─────────────────┘    └──────────────────┘    │  Election, etc) │
+                              │                 └─────────────────┘
+                              ▼
+                       ┌──────────────────┐
+                       │   NATS Server    │
+                       │  (Message Bus)   │
+                       └──────────────────┘
 ```
 
-## Compile and run the project
+## ✨ Características
+
+### 🔐 Seguridad y Autenticación
+- **JWT Authentication**: Autenticación basada en tokens JWT
+- **Role-based Access Control (RBAC)**: Control de acceso basado en roles (ADMIN, VOTER)
+- **Guards y Decoradores**: Protección automática de rutas y endpoints
+- **Validación de datos**: Validación robusta con class-validator
+
+### 🚀 Funcionalidades Principales
+- **Gestión de Usuarios**: CRUD completo con control de permisos
+- **Gestión de Elecciones**: Creación, consulta y administración de elecciones
+- **Gestión de Candidatos**: Administración de candidatos por elección
+- **Sistema de Votación**: Proceso seguro de emisión de votos
+- **Documentación Automática**: Swagger/OpenAPI integrado
+
+### 🔄 Comunicación entre Microservicios
+- **NATS**: Message broker para comunicación asíncrona
+- **RPC Pattern**: Comunicación request-response entre servicios
+- **Error Handling**: Manejo robusto de errores distribuidos
+
+## 🛠️ Tecnologías
+
+- **Framework**: NestJS 11.x
+- **Runtime**: Node.js 20+
+- **Message Broker**: NATS
+- **Authentication**: JWT
+- **Validation**: class-validator, class-transformer
+- **Documentation**: Swagger/OpenAPI
+- **Container**: Docker
+
+## 📡 Endpoints API
+
+### 🔑 Autenticación (`/auth`)
+| Método | Endpoint | Descripción | Acceso |
+|--------|----------|-------------|---------|
+| POST | `/auth/register` | Registro de usuarios | Público |
+| POST | `/auth/login` | Inicio de sesión | Público |
+
+### 👥 Usuarios (`/users`)
+| Método | Endpoint | Descripción | Acceso |
+|--------|----------|-------------|---------|
+| GET | `/users` | Listar usuarios | Admin |
+| GET | `/users/:id` | Obtener usuario | Admin/Own |
+| POST | `/users` | Crear usuario | Admin |
+| PATCH | `/users/:id` | Actualizar usuario | Admin/Own |
+| DELETE | `/users/:id` | Eliminar usuario | Admin |
+
+### 🗳️ Elecciones (`/election`)
+| Método | Endpoint | Descripción | Acceso |
+|--------|----------|-------------|---------|
+| GET | `/election` | Listar elecciones | Público |
+| GET | `/election/:id` | Obtener elección | Público |
+| POST | `/election` | Crear elección | Admin |
+| PUT | `/election/:id` | Actualizar elección | Admin |
+| DELETE | `/election/:id` | Eliminar elección | Admin |
+| GET | `/election/:id/voters/:uid` | Verificar votante | Admin/Own |
+
+### 👤 Candidatos (`/candidate`)
+| Método | Endpoint | Descripción | Acceso |
+|--------|----------|-------------|---------|
+| GET | `/candidate` | Listar candidatos | Público |
+| GET | `/candidate/:id` | Obtener candidato | Público |
+| POST | `/candidate` | Crear candidato | Admin |
+| PUT | `/candidate/:id` | Actualizar candidato | Admin |
+| DELETE | `/candidate/:id` | Eliminar candidato | Admin |
+
+### 🗳️ Votos (`/votes`)
+| Método | Endpoint | Descripción | Acceso |
+|--------|----------|-------------|---------|
+| POST | `/votes` | Emitir voto | Voter |
+| GET | `/votes` | Listar todos los votos | Admin |
+| GET | `/votes/:id` | Obtener voto específico | Admin |
+
+## 🚦 Control de Acceso
+
+### Roles del Sistema
+- **ADMIN**: Acceso completo al sistema
+- **VOTER**: Acceso limitado para votantes
+
+### Políticas de Seguridad
+- Los votantes solo pueden acceder a su propia información
+- Los administradores tienen acceso completo
+- Los endpoints públicos no requieren autenticación
+- Validación de JWT en cada petición protegida
+
+## 🛠️ Instalación y Configuración
+
+### Requisitos Previos
+- Node.js 20+
+- Docker y Docker Compose
+- NATS Server
+
+### Instalación Local
 
 ```bash
-# development
-$ npm run start
+# Clonar el repositorio
+git clone https://github.com/Sistema-Votacion-MS/client-gateway.git
+cd client-gateway
 
-# watch mode
-$ npm run start:dev
+# Instalar dependencias
+npm install
 
-# production mode
-$ npm run start:prod
+# Configurar variables de entorno
+cp .env.example .env
 ```
 
-## Run tests
+### Variables de Entorno
 
 ```bash
-# unit tests
-$ npm run test
+# Puerto del servidor
+PORT=3000
 
-# e2e tests
-$ npm run test:e2e
+# Servidores NATS (separados por comas)
+NATS_SERVERS=nats://localhost:4222
 
-# test coverage
-$ npm run test:cov
+# Secreto JWT (cambiar en producción)
+JWT_SECRET=your-super-secret-key-here
 ```
 
-## Deployment
-
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+### Ejecución en Desarrollo
 
 ```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
+# Modo desarrollo con hot reload
+npm run start:dev
+
+# Modo producción
+npm run start:prod
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+## 🐳 Despliegue con Docker
 
-## Resources
+### Docker Compose (Recomendado)
 
-Check out a few resources that may come in handy when working with NestJS:
+```bash
+# Construir y ejecutar
+npm run docker:deploy
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+# O manualmente
+docker-compose up -d --build
 
-## Support
+# Ver logs
+docker-compose logs -f
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+# Parar servicios
+docker-compose down
+```
 
-## Stay in touch
+### Scripts NPM Disponibles
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+```bash
+# Docker
+npm run docker:build          # Construir imagen
+npm run docker:build:clean    # Construir imagen limpia
+npm run docker:up             # Ejecutar contenedores
+npm run docker:down           # Parar contenedores
+npm run docker:down:clean     # Parar y limpiar
+npm run docker:logs           # Ver logs
+npm run docker:restart        # Reiniciar servicios
+npm run docker:deploy         # Build + Run
+npm run docker:deploy:clean   # Deploy limpio
 
-## License
+# Desarrollo
+npm run start:dev             # Desarrollo con hot reload
+npm run start:debug           # Debug mode
+npm run build                 # Construir aplicación
+npm run lint                  # Linter
+npm run test                  # Tests unitarios
+npm run test:e2e              # Tests E2E
+```
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+### Scripts de Despliegue Automatizado
+
+```bash
+# Windows PowerShell
+.\deploy.ps1
+
+# Linux/Mac Bash
+./deploy.sh
+```
+
+## 📊 Servicios Incluidos
+
+Una vez desplegado, tendrás acceso a:
+
+- **🌐 API Gateway**: http://localhost:3000
+- **📚 Swagger Docs**: http://localhost:3000/api/docs
+- **📡 NATS Monitoring**: http://localhost:8222
+
+## 🔍 Documentación API
+
+La documentación interactiva de la API está disponible en:
+- **Swagger UI**: `http://localhost:3000/api/docs`
+- **OpenAPI JSON**: `http://localhost:3000/api/docs-json`
+
+### Características de la Documentación
+- Interfaz interactiva para probar endpoints
+- Autenticación JWT integrada
+- Esquemas de datos detallados
+- Ejemplos de requests/responses
+
+## 🧪 Testing
+
+```bash
+# Tests unitarios
+npm run test
+
+# Tests con coverage
+npm run test:cov
+
+# Tests E2E
+npm run test:e2e
+
+# Tests en modo watch
+npm run test:watch
+```
+
+## 📁 Estructura del Proyecto
+
+```
+src/
+├── auth/                 # Módulo de autenticación
+│   ├── decorators/      # Decoradores personalizados
+│   ├── dto/             # Data Transfer Objects
+│   ├── guards/          # Guards de seguridad
+│   └── interfaces/      # Interfaces TypeScript
+├── candidate/           # Módulo de candidatos
+├── common/              # Código compartido
+│   ├── dto/            # DTOs comunes
+│   └── exceptions/     # Filtros de excepciones
+├── config/              # Configuración de la app
+├── election/            # Módulo de elecciones
+├── transports/          # Configuración NATS
+├── users/               # Módulo de usuarios
+├── votes/               # Módulo de votación
+├── app.module.ts        # Módulo principal
+└── main.ts              # Punto de entrada
+```
+
+## 🔧 Configuración Avanzada
+
+### Guards Globales
+```typescript
+// Aplicados automáticamente a toda la aplicación
+JwtAuthGuard    // Autenticación JWT
+RolesGuard      // Control de acceso por roles
+```
+
+### Decoradores Disponibles
+```typescript
+@Public()                    // Endpoint público
+@Roles(RoleEnum.ADMIN)      // Solo administradores
+@CurrentUser()              // Inyectar usuario actual
+```
+
+### Filtros de Excepciones
+- **RpcCustomExceptionFilter**: Manejo de errores de microservicios
+- **HttpExceptionFilter**: Manejo de errores HTTP estándar
+
+## 🤝 Contribución
+
+1. Fork el proyecto
+2. Crea una rama para tu feature (`git checkout -b feature/AmazingFeature`)
+3. Commit tus cambios (`git commit -m 'Add some AmazingFeature'`)
+4. Push a la rama (`git push origin feature/AmazingFeature`)
+5. Abre un Pull Request
+
+### Convenciones de Código
+- Usar TypeScript estricto
+- Seguir las convenciones de NestJS
+- Documentar todas las funciones públicas
+- Escribir tests para nuevas funcionalidades
+
+## 📝 Changelog
+
+### v1.0.0 (Actual)
+- ✅ Implementación inicial del API Gateway
+- ✅ Autenticación y autorización JWT
+- ✅ Integración con microservicios via NATS
+- ✅ Documentación Swagger completa
+- ✅ Docker deployment ready
+
+## 🐛 Problemas Conocidos
+
+- Consultar [Issues en GitHub](https://github.com/Sistema-Votacion-MS/client-gateway/issues)
+
+## 📞 Soporte
+
+- **Issues**: [GitHub Issues](https://github.com/Sistema-Votacion-MS/client-gateway/issues)
+- **Documentation**: [Swagger Docs](http://localhost:3000/api/docs)
+
+## 📄 Licencia
+
+Este proyecto está licenciado bajo la Licencia MIT - ver el archivo [LICENSE](LICENSE) para más detalles.
+
+---
+
+<p align="center">
+  Hecho con ❤️ por el equipo de Sistema de Votaciones Electrónicas
+</p>
