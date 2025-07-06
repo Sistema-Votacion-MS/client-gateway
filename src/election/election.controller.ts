@@ -3,7 +3,7 @@ import { NATS_SERVICE } from 'src/config/services';
 import { CreateElectionDto } from './dto/create-election.dto';
 import { UpdateElectionDto } from './dto/update-election.dto';
 import { ClientProxy, RpcException } from '@nestjs/microservices';
-import { catchError } from 'rxjs';
+import { catchError, map } from 'rxjs';
 import { ElectionPaginationDto } from './dto/election-pagination.dto';
 import { ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
 
@@ -67,9 +67,19 @@ export class ElectionController {
     @Param('id', ParseUUIDPipe) id: string,
     @Param('uid', ParseUUIDPipe) uid: string,
   ) {
-    return this.client.send({ cmd: 'voter_verify' }, { electionId: id, userId: uid }).pipe(
+    return this.client.send({ cmd: 'voter_verify' }, { election_id: id, user_id: uid }).pipe(
       catchError((error) => {
         throw new RpcException(error);
+      }),
+      map((response) => {
+        if (!response) {
+          throw new RpcException({
+            status: 404,
+            message: `Voter with user_id ${uid} not found in election ${id}`,
+            error: 'Voter Not Found',
+          });
+        }
+        return response;
       }),
     );
   }
